@@ -1,0 +1,12 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+}
+
+<h2>@ViewBag.Title</h2>
+<h3>@ViewBag.Message</h3>
+@if (ViewBag.FullName != null)
+{
+    <p>Xin chào, @ViewBag.FullName!</p>
+}
+
+<p>@Html.ActionLink("Đăng xuất", "Logout", "Account")</p>

@@ -1,0 +1,17 @@
+﻿@if (Request.IsAuthenticated)
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>
+            @* Giả sử bạn lưu FullName vào Session khi đăng nhập *@
+            <a href="#">Xin chào, @(Session["FullName"] ?? User.Identity.Name)!</a>
+        </li>
+        <li><a href="@Url.Action("Logout", "Account")">Đăng xuất</a></li>
+    </ul>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Đăng ký", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Đăng nhập", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+}

@@ -1,0 +1,76 @@
+﻿@model MyStoreApp.ViewModels.OrderViewModel
+@{ ViewBag.Title = "Tạo Đơn hàng Mới"; }
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>Đơn hàng</h4> <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.AgentId, "Đại lý", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("AgentId", null, "Chọn Đại lý", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.AgentId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.OrderDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.OrderDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            </div>
+        </div>
+
+        <h4>Chi tiết Đơn hàng</h4>
+        <table class="table" id="orderItemsTable">
+            <thead><tr><th>Sản phẩm</th><th>Số lượng</th><th>Đơn giá</th><th>Thành tiền</th><th>Hành động</th></tr></thead>
+            <tbody></tbody>
+        </table>
+        <button type="button" id="addItemBtn" class="btn btn-info">Thêm Mục</button>
+        <hr />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Tạo Đơn hàng" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            var products = @Html.Raw(Json.Encode(ViewBag.Products));
+            var itemIndex = 0;
+
+            $("#addItemBtn").click(function () {
+                var row = '<tr>';
+                row += '<td><select name="OrderDetails[' + itemIndex + '].ProductId" class="form-control product-select"><option value="">Chọn Sản phẩm</option>';
+                $.each(products, function (i, p) { row += '<option value="' + p.ProductId + '" data-price="' + p.UnitPrice + '">' + p.ProductName + '</option>'; });
+                row += '</select></td>';
+                row += '<td><input type="number" name="OrderDetails[' + itemIndex + '].Quantity" class="form-control quantity" min="1" value="1" /></td>';
+                row += '<td><input type="text" name="OrderDetails[' + itemIndex + '].UnitPrice" class="form-control unit-price" readonly /></td>';
+                row += '<td><span class="subtotal">0.00</span></td>';
+                row += '<td><button type="button" class="btn btn-danger btn-sm removeItemBtn">Xóa</button></td>';
+                row += '</tr>';
+                $('#orderItemsTable tbody').append(row);
+                itemIndex++;
+            });
+
+            $('#orderItemsTable').on('change', '.product-select', function () {
+                var price = $(this).find('option:selected').data('price');
+                var row = $(this).closest('tr');
+                row.find('.unit-price').val(price ? parseFloat(price).toFixed(2) : '');
+                updateSubtotal(row);
+            });
+            $('#orderItemsTable').on('input', '.quantity', function () { updateSubtotal($(this).closest('tr')); });
+            $('#orderItemsTable').on('click', '.removeItemBtn', function () { $(this).closest('tr').remove(); });
+
+            function updateSubtotal(row) {
+                var qty = parseInt(row.find('.quantity').val());
+                var price = parseFloat(row.find('.unit-price').val());
+                row.find('.subtotal').text((!isNaN(qty) && !isNaN(price) && qty > 0) ? (qty * price).toFixed(2) : '0.00');
+            }
+        });
+    </script>
+}

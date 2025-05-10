@@ -1,0 +1,51 @@
+﻿@model MyStoreApp.Models.Order
+@{ ViewBag.Title = "Chi tiết Đơn hàng - #" + Model.OrderId; }
+
+<h2>@ViewBag.Title</h2>
+<button onclick="window.print();" class="btn btn-primary hidden-print">In Đơn hàng</button>
+<hr />
+<div>
+    <h4>Thông tin Đơn hàng</h4>
+    <dl class="dl-horizontal">
+        <dt>Mã Đơn hàng</dt>
+        <dd>@Html.DisplayFor(model => model.OrderId)</dd>
+        <dt>Ngày Đặt</dt>
+        <dd>@Html.DisplayFor(model => model.OrderDate)</dd>
+        <dt>Đại lý</dt>
+        <dd>@Html.DisplayFor(model => model.Agent.AgentName)</dd>
+        <dt>Trạng thái</dt>
+        <dd>@Html.DisplayFor(model => model.Status)</dd>
+        <dt>Tổng tiền</dt>
+        <dd>@Html.DisplayFor(model => model.TotalAmount)</dd>
+    </dl>
+</div>
+<h4>Chi tiết Mặt hàng</h4>
+<table class="table">
+    <tr><th>Tên Sản phẩm</th><th>Số lượng</th><th>Giá lúc mua</th><th>Thành tiền</th></tr>
+    @foreach (var item in Model.OrderDetails)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Product.ProductName)</td>
+            <td>@Html.DisplayFor(modelItem => item.Quantity)</td>
+            <td>@Html.DisplayFor(modelItem => item.PriceAtPurchase)</td>
+            <td>@((item.Quantity * item.PriceAtPurchase).ToString("C"))</td>
+        </tr>
+    }
+</table>
+<p class="hidden-print">
+    @Html.ActionLink("Tạo Đơn Mới", "Create") |
+    @Html.ActionLink("Về Danh sách Đơn hàng", "Index")
+</p>
+<style type="text/css" media="print">
+    body {
+        padding-top: 0;
+    }
+
+    .hidden-print, .navbar, .footer {
+        display: none !important;
+    }
+
+    a[href]:after {
+        content: none !important;
+    }
+</style>

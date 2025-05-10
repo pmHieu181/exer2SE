@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar" aria-controls="navbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Tên Ứng Dụng", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse" id="navbar">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Trang chủ", "Index", "Home")</li>
+                    @* BỎ QUA ĐIỀU KIỆN IF ĐỂ TEST *@
+                    @* @if (Request.IsAuthenticated) *@
+                    @* { *@
+                    <li>@Html.ActionLink("Sản phẩm (Test)", "Index", "Products")</li>
+                    <li>@Html.ActionLink("Đại lý (Test)", "Index", "Agents")</li>
+                    <li>@Html.ActionLink("Tạo Đơn hàng (Test)", "Create", "Orders")</li>
+                    <li>@Html.ActionLink("Xem Đơn hàng (Test)", "Index", "Orders")</li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Báo cáo (Test) <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Mặt hàng bán chạy", "BestSellingItems", "Reports")</li>
+                            <li>@Html.ActionLink("Hàng theo Đại lý", "ItemsByAgent", "Reports")</li>
+                            <li>@Html.ActionLink("Đại lý theo Mặt hàng", "AgentsByItem", "Reports")</li>
+                        </ul>
+                    </li>
+                    @* } *@
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

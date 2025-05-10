@@ -1,0 +1,45 @@
+﻿@model IEnumerable<MyStoreApp.Models.Agent>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.AgentName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ContactInfo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.AgentName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ContactInfo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.AgentId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.AgentId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.AgentId })
+        </td>
+    </tr>
+}
+
+</table>
